@@ -14,10 +14,13 @@ class FoodItem:
 
 class Transaction:
     def __init__(self, items: list[FoodItem]):
-        self.items = items
-        self.total_cost = self._calculate_total()
+        self.items: list[FoodItem] = items
 
-    def _calculate_total(self) -> float:
+    def add_item(self, item: FoodItem) -> None:
+        self.items.append(item)
+
+    @property
+    def total_cost(self) -> float:
         return sum(item.price for item in self.items)
 
 class Customer:
@@ -34,10 +37,17 @@ class Customer:
 
 class Menu:
     def __init__(self):
-        self.items = []
+        self.items: list[FoodItem] = []
 
     def add_item(self, item: FoodItem) -> None:
         self.items.append(item)
+
+    def remove_item(self, name: str) -> bool:
+        for i, item in enumerate(self.items):
+            if item.name == name:
+                self.items.pop(i)
+                return True
+        return False
 
     def filter_by_category(self, category: str) -> list[FoodItem]:
         return [item for item in self.items if item.category == category]
