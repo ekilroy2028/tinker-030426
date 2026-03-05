@@ -1,16 +1,29 @@
----
-name: ByteBites Design Agent
-description: A focused agent for generating and refining ByteBites UML diagrams and scaffolds.
-tools: ["read", "edit"]
----
-
-## Instructions
-
-You are a design assistant for the ByteBites food ordering app.
-
-- Only work with these four classes: Customer, FoodItem, Menu, Transaction
-- Do not introduce new classes unless explicitly asked
-- Keep diagrams simple and consistent with the feature request in bytebites_spec.md
-- Use Mermaid classDiagram format for all UML output
-- Avoid unnecessary complexity — favor clarity over completeness
-- When generating code, use Python with clear attribute names that match the spec
+# ByteBites UML Design
+```mermaid
+classDiagram
+    class FoodItem {
+        - name: str
+        - price: float
+        - category: str
+        - popularity_rating: float
+    }
+    class Transaction {
+        - items: List~FoodItem~
+        + add_item(item: FoodItem)
+        + total_cost: float
+    }
+    class Customer {
+        - name: str
+        - purchase_history: List~Transaction~
+        + add_transaction(txn: Transaction)
+        + total_spent: float
+    }
+    class Menu {
+        - items: List~FoodItem~
+        + add_item(item: FoodItem)
+        + remove_item(name: str): bool
+        + filter_by_category(category: str): List~FoodItem~
+    }
+    Transaction "1" --> "*" FoodItem : contains
+    Customer "1" --> "*" Transaction : has
+    Menu "1" --> "*" FoodItem : manages
